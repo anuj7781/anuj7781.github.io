@@ -1,15 +1,6 @@
 ## This is my first blog post
 
-This is a blog that helps in talks about how we can add two numbers
-
-```C
-int a,b;
-cin>>a>>b;
-cout<<c;
-```
-```
-cout<<"hello world\n"
-```
+This is a blog that talks about uring-passthru
 
 ```
 /*
@@ -96,3 +87,69 @@ struct io_uring_cqe {
 	__u64 big_cqe[];
 };
 ```
+
+
+
+```
+struct nvme_passthru_cmd64 {
+	__u8	opcode;
+	__u8	flags;
+	__u16	rsvd1;
+	__u32	nsid;
+	__u32	cdw2;
+	__u32	cdw3;
+	__u64	metadata;
+	__u64	addr;
+	__u32	metadata_len;
+	union {
+		__u32	data_len; /* for non-vectored io */
+		__u32	vec_cnt; /* for vectored io */
+	};
+	__u32	cdw10;
+	__u32	cdw11;
+	__u32	cdw12;
+	__u32	cdw13;
+	__u32	cdw14;
+	__u32	cdw15;
+	__u32	timeout_ms;
+	__u32   rsvd2;
+	__u64	result;
+};
+```
+
+```
+/* same as struct nvme_passthru_cmd64, minus the 8b result field */
+struct nvme_uring_cmd {
+	__u8	opcode;
+	__u8	flags;
+	__u16	rsvd1;
+	__u32	nsid;
+	__u32	cdw2;
+	__u32	cdw3;
+	__u64	metadata;
+	__u64	addr;
+	__u32	metadata_len;
+	__u32	data_len;
+	__u32	cdw10;
+	__u32	cdw11;
+	__u32	cdw12;
+	__u32	cdw13;
+	__u32	cdw14;
+	__u32	cdw15;
+	__u32	timeout_ms;
+	__u32   rsvd2;
+};
+```
+
+```
+if (copy_from_user(&cmd, ucmd, sizeof(cmd)))
+	return -EFAULT;
+```
+
+```
+if (put_user(cmd.result, &ucmd->result))
+	return -EFAULT;
+```
+
+
+
