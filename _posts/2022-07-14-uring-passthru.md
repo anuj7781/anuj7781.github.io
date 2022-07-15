@@ -155,5 +155,8 @@ if (put_user(cmd.result, &ucmd->result))
 	return -EFAULT;
 ```
 
+```
+cout<<a+b<<end;
+```
 
 
