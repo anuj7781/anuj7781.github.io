@@ -7,3 +7,6 @@ int a,b;
 cin>>a>>b;
 cout<<c;
 ```
+```
+cout<<"hello world\n"
+```
